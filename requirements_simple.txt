@@ -1,0 +1,28 @@
+# Task 1 & 2: Simplified Requirements (Pre-built wheels)
+
+# Core scraping library
+google-play-scraper
+
+# Data manipulation and analysis (use latest compatible versions)
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Sentiment analysis libraries
+vaderSentiment
+textblob
+afinn
+
+# NLP and text processing
+nltk
+
+# Machine learning and topic modeling
+scikit-learn>=1.3.0
+gensim>=4.3.0
+
+# Visualization libraries
+matplotlib>=3.7.0
+seaborn>=0.12.0
+wordcloud
+
+# Note: This file uses flexible version constraints to allow pip to find
+# compatible pre-built wheels, which install much faster than building from source.

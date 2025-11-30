@@ -29,7 +29,7 @@ APPS_CONFIG = [
         'short_name': 'boa'
     },
     {
-        'app_id': 'com.dashenbank.mobilebanking',
+        'app_id': 'com.dashen.dashensuperapp',
         'bank_name': 'Dashen Bank',
         'short_name': 'dashen'
     }
@@ -50,7 +50,7 @@ def create_directories():
     print(f"✓ Created directories: {RAW_DATA_DIR}")
 
 
-def scrape_app_reviews(app_id, bank_name, short_name, count=400):
+def scrape_app_reviews(app_id, bank_name, short_name, count=TARGET_REVIEWS_PER_APP):
     """
     Scrape reviews for a single app from Google Play Store.
     

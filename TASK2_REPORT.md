@@ -1,7 +1,7 @@
 # Task 2: NLP & Sentiment Analysis Report
 ## Ethiopian Banking Apps - Customer Experience Analytics
 
-**Generated**: 2025-11-30 18:14:26
+**Generated**: 2025-11-30 23:03:10
 
 ---
 
@@ -13,16 +13,16 @@ This report presents comprehensive sentiment analysis and topic modeling results
 - **Bank of Abyssinia (BOA)** - Mobile Banking App
 - **Dashen Bank** - Mobile Banking App
 
-**Dataset**: 652 customer reviews analyzed
+**Dataset**: 979 customer reviews analyzed
 **Date Range**: 2024-10-03 to 2025-11-29
 **Analysis Methods**: VADER, TextBlob, Afinn sentiment analysis; LDA & NMF topic modeling
 
 ### Key Findings
 
-✅ **Most Positive Bank**: Commercial Bank of Ethiopia (VADER: 0.232)
+✅ **Most Positive Bank**: Dashen Bank (VADER: 0.288)
 ⚠️ **Most Negative Bank**: Bank of Abyssinia (VADER: 0.105)
-📊 **Most Controversial**: Bank of Abyssinia (Std Dev: 0.444)
-🔗 **Rating-Sentiment Correlation**: 0.513 (strong positive correlation)
+📊 **Most Controversial**: Dashen Bank (Std Dev: 0.452)
+🔗 **Rating-Sentiment Correlation**: 0.536 (strong positive correlation)
 
 ---
 
@@ -32,33 +32,34 @@ This report presents comprehensive sentiment analysis and topic modeling results
 
 | Bank | Mean VADER Score | Std Dev | Interpretation |
 |------|------------------|---------|----------------|
+| Dashen | 0.288 | 0.452 | Positive |
 | Commercial | 0.232 | 0.377 | Positive |
 | Bank | 0.105 | 0.444 | Positive |
 
 **Analysis**:
-- **Commercial Bank of Ethiopia** leads with the highest average sentiment score (0.232), indicating strong customer satisfaction.
+- **Dashen Bank** leads with the highest average sentiment score (0.288), indicating strong customer satisfaction.
 - **Bank of Abyssinia** shows the lowest sentiment (0.105), suggesting areas for improvement.
-- **Bank of Abyssinia** has the highest variance (σ=0.444), indicating mixed customer experiences.
+- **Dashen Bank** has the highest variance (σ=0.452), indicating mixed customer experiences.
 
 ### 1.2 Sentiment Distribution
 
 | Category | Count | Percentage |
 |----------|-------|------------|
-| Positive | 304 | 46.6% |
-| Neutral | 243 | 37.3% |
-| Negative | 105 | 16.1% |
+| Positive | 498 | 50.9% |
+| Neutral | 328 | 33.5% |
+| Negative | 153 | 15.6% |
 
 ### 1.3 Sentiment by Rating
 
 | Rating (Stars) | Average VADER Score |
 |----------------|---------------------|
-| 1 ⭐ | -0.163 |
-| 2 ⭐ | 0.081 |
-| 3 ⭐ | 0.117 |
-| 4 ⭐ | 0.311 |
-| 5 ⭐ | 0.330 |
+| 1 ⭐ | -0.157 |
+| 2 ⭐ | 0.030 |
+| 3 ⭐ | 0.146 |
+| 4 ⭐ | 0.321 |
+| 5 ⭐ | 0.381 |
 
-**Correlation**: Strong positive correlation (0.513) between star ratings and sentiment scores, validating the consistency of customer feedback.
+**Correlation**: Strong positive correlation (0.536) between star ratings and sentiment scores, validating the consistency of customer feedback.
 
 ### 1.4 Sentiment Visualizations
 
@@ -80,40 +81,45 @@ This report presents comprehensive sentiment analysis and topic modeling results
 
 ### 2.1 LDA Topic Analysis (5 Topics)
 
-**Topic 0**: boa, please, great, ethiopia, cbe, problem, pin, work
+**Topic 0**: time, excellent, take, problem, worst_ever, pin, loading, user
 - *Interpretation*: Technical issues and app stability problems
 
-**Topic 1**: nice, work, phone, fast, working, issue, developer_option, better
-- *Interpretation*: Technical issues and app stability problems
+**Topic 1**: please, slow, phone, open, time, update, work, developer_option
+- *Interpretation*: App updates and new features
 
-**Topic 2**: time, transfer, branch, money, take, please, long, excellent
+**Topic 2**: work, like, working, service, update, great, fast, transaction
 - *Interpretation*: Transaction and payment-related topics
 
-**Topic 3**: like, update, service, worst, thank, cbe, ever, boa
+**Topic 3**: best, nice, dashen, boa, cbe, easy, keep, always
+- *Interpretation*: Positive user experience and convenience
+
+**Topic 4**: account, amazing, ethiopia, love, thank, wow, cbe, ever
 - *Interpretation*: Authentication and account access concerns
-
-**Topic 4**: best, work, transaction, need, amazing, easy, love, back
-- *Interpretation*: Transaction and payment-related topics
 
 ### 2.2 Topic Prevalence
 
 | Topic | Number of Reviews | Percentage |
 |-------|-------------------|------------|
-| Topic 0 | 70 | 12.0% |
-| Topic 1 | 268 | 45.9% |
-| Topic 2 | 92 | 15.8% |
-| Topic 3 | 59 | 10.1% |
-| Topic 4 | 95 | 16.3% |
+| Topic 0 | 107 | 12.1% |
+| Topic 1 | 99 | 11.2% |
+| Topic 2 | 366 | 41.3% |
+| Topic 3 | 172 | 19.4% |
+| Topic 4 | 142 | 16.0% |
 
 ### 2.3 Most Common Phrases
 
 **Top Bigrams**:
 
-- developer option (13 occurrences)
-- user friendly (8 occurrences)
+- worst ever (16 occurrences)
+- developer option (15 occurrences)
+- user friendly (14 occurrences)
+- dashen super (14 occurrences)
+- send money (8 occurrences)
 - please fix (8 occurrences)
-- worst ever (8 occurrences)
-- send money (6 occurrences)
+- transfer money (7 occurrences)
+- always step (6 occurrences)
+- ever seen (5 occurrences)
+- step ahead (2 occurrences)
 
 ### 2.4 Topic Visualizations
 
@@ -186,6 +192,12 @@ Customers appreciate:
 - Total Reviews: 336
 - Negative Reviews: 76 (22.6%)
 
+**Dashen**:
+- Average Rating: 3.80/5.0
+- Average Sentiment: 0.288
+- Total Reviews: 327
+- Negative Reviews: 48 (14.7%)
+
 ---
 
 ## 4. Recommendations
@@ -240,7 +252,7 @@ Customers appreciate:
    - Implement redundancy systems
 
 2. **Competitive Positioning**
-   - Commercial Bank of Ethiopia leads in customer satisfaction
+   - Dashen Bank leads in customer satisfaction
    - Focus on differentiating features
    - Monitor competitor app improvements
 
@@ -271,11 +283,11 @@ Customers appreciate:
 
 ## 5. Conclusion
 
-This analysis of 652 customer reviews reveals significant insights into the customer experience of Ethiopian banking mobile applications. While there is strong correlation between ratings and sentiment scores, indicating consistent customer feedback, there are clear areas for improvement across all three banks.
+This analysis of 979 customer reviews reveals significant insights into the customer experience of Ethiopian banking mobile applications. While there is strong correlation between ratings and sentiment scores, indicating consistent customer feedback, there are clear areas for improvement across all three banks.
 
 **Key Takeaways**:
 
-1. **Commercial Bank of Ethiopia** demonstrates the strongest customer satisfaction, serving as a benchmark for competitors
+1. **Dashen Bank** demonstrates the strongest customer satisfaction, serving as a benchmark for competitors
 2. **Technical stability** remains the primary pain point across all banks
 3. **UI/UX improvements** are critical for enhancing user experience
 4. **Proactive customer support** can significantly improve sentiment scores
@@ -288,7 +300,7 @@ By addressing the identified pain points and implementing the recommendations, E
 
 ### Data Collection
 - **Source**: Google Play Store reviews
-- **Total Reviews**: 652
+- **Total Reviews**: 979
 - **Date Range**: 2024-10-03 to 2025-11-29
 
 ### Sentiment Analysis
@@ -312,6 +324,6 @@ By addressing the identified pain points and implementing the recommendations, E
 
 ---
 
-*Report generated on 2025-11-30 at 18:14:26*
+*Report generated on 2025-11-30 at 23:03:10*
 
 **10 Academy - Week 2: Fintech Customer Experience Analytics**

@@ -45,11 +45,12 @@ class PostgreSQLInserter:
                 password=self.db_config['password']
             )
             self.cursor = self.conn.cursor()
-            print("✓ Successfully connected to PostgreSQL database")
+            print("[OK] Successfully connected to PostgreSQL database")
             return True
         except psycopg2.Error as e:
-            print(f"✗ Error connecting to PostgreSQL database: {e}")
+            print(f"[ERROR] Error connecting to PostgreSQL database: {e}")
             return False
+    
     
     def close(self):
         """Close database connection"""
@@ -57,7 +58,7 @@ class PostgreSQLInserter:
             self.cursor.close()
         if self.conn:
             self.conn.close()
-        print("✓ Database connection closed")
+        print("[OK] Database connection closed")
     
     def insert_banks(self, df: pd.DataFrame) -> Dict[str, int]:
         """
@@ -74,7 +75,7 @@ class PostgreSQLInserter:
             unique_banks = df['bank'].unique()
             bank_mapping = {}
             
-            print(f"\n📊 Inserting {len(unique_banks)} unique banks...")
+            print(f"\n[INFO] Inserting {len(unique_banks)} unique banks...")
             
             for bank_name in unique_banks:
                 # Insert bank and get the generated bank_id
@@ -92,13 +93,13 @@ class PostgreSQLInserter:
                 bank_mapping[bank_name] = bank_id
                 
             self.conn.commit()
-            print(f"✓ Successfully inserted {len(unique_banks)} banks")
+            print(f"[OK] Successfully inserted {len(unique_banks)} banks")
             
             return bank_mapping
             
         except psycopg2.Error as e:
             self.conn.rollback()
-            print(f"✗ Error inserting banks: {e}")
+            print(f"[ERROR] Error inserting banks: {e}")
             raise
     
     def insert_reviews(self, df: pd.DataFrame, bank_mapping: Dict[str, int]) -> int:
@@ -113,14 +114,14 @@ class PostgreSQLInserter:
             Number of reviews inserted
         """
         try:
-            print(f"\n📊 Inserting {len(df)} reviews...")
+            print(f"\n[INFO] Inserting {len(df)} reviews...")
             
             # Prepare data for insertion
             review_data = []
             for _, row in df.iterrows():
                 bank_id = bank_mapping.get(row['bank'])
                 if bank_id is None:
-                    print(f"⚠ Warning: Bank '{row['bank']}' not found in mapping, skipping review")
+                    print(f"[WARNING] Warning: Bank '{row['bank']}' not found in mapping, skipping review")
                     continue
                 
                 # Parse date
@@ -152,33 +153,33 @@ class PostgreSQLInserter:
             extras.execute_batch(self.cursor, insert_query, review_data, page_size=1000)
             self.conn.commit()
             
-            print(f"✓ Successfully inserted {len(review_data)} reviews")
+            print(f"[OK] Successfully inserted {len(review_data)} reviews")
             return len(review_data)
             
         except psycopg2.Error as e:
             self.conn.rollback()
-            print(f"✗ Error inserting reviews: {e}")
+            print(f"[ERROR] Error inserting reviews: {e}")
             raise
     
     def print_summary_statistics(self):
         """Print summary statistics after insertion"""
         try:
             print("\n" + "="*70)
-            print("📈 DATABASE SUMMARY STATISTICS")
+            print("DATABASE SUMMARY STATISTICS")
             print("="*70)
             
             # Total banks
             self.cursor.execute("SELECT COUNT(*) FROM banks;")
             total_banks = self.cursor.fetchone()[0]
-            print(f"\n🏦 Total Banks: {total_banks}")
+            print(f"\n[BANKS] Total Banks: {total_banks}")
             
             # Total reviews
             self.cursor.execute("SELECT COUNT(*) FROM reviews;")
             total_reviews = self.cursor.fetchone()[0]
-            print(f"📝 Total Reviews: {total_reviews}")
+            print(f"[REVIEWS] Total Reviews: {total_reviews}")
             
             # Reviews per bank
-            print(f"\n📊 Reviews per Bank:")
+            print(f"\n[INFO] Reviews per Bank:")
             self.cursor.execute("""
                 SELECT b.bank_name, COUNT(r.review_id) as review_count
                 FROM banks b
@@ -192,10 +193,10 @@ class PostgreSQLInserter:
             # Average rating
             self.cursor.execute("SELECT ROUND(AVG(rating)::numeric, 2) FROM reviews;")
             avg_rating = self.cursor.fetchone()[0]
-            print(f"\n⭐ Average Rating: {avg_rating}/5.0")
+            print(f"\n[RATING] Average Rating: {avg_rating}/5.0")
             
             # Rating distribution
-            print(f"\n📊 Rating Distribution:")
+            print(f"\n[INFO] Rating Distribution:")
             self.cursor.execute("""
                 SELECT rating, COUNT(*) as count,
                        ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (), 2) as percentage
@@ -204,11 +205,11 @@ class PostgreSQLInserter:
                 ORDER BY rating DESC;
             """)
             for rating, count, percentage in self.cursor.fetchall():
-                bar = '█' * int(percentage / 2)
-                print(f"   {rating}⭐: {count:4d} ({percentage:5.2f}%) {bar}")
+                bar = '=' * int(percentage / 2)
+                print(f"   {rating} stars: {count:4d} ({percentage:5.2f}%) {bar}")
             
             # Source distribution
-            print(f"\n📱 Reviews by Source:")
+            print(f"\n[SOURCE] Reviews by Source:")
             self.cursor.execute("""
                 SELECT source, COUNT(*) as count
                 FROM reviews
@@ -224,12 +225,12 @@ class PostgreSQLInserter:
                 FROM reviews;
             """)
             min_date, max_date = self.cursor.fetchone()
-            print(f"\n📅 Date Range: {min_date} to {max_date}")
+            print(f"\n[DATE] Date Range: {min_date} to {max_date}")
             
             print("\n" + "="*70)
             
         except psycopg2.Error as e:
-            print(f"✗ Error fetching summary statistics: {e}")
+            print(f"[ERROR] Error fetching summary statistics: {e}")
 
 
 def load_csv_data(csv_path: str) -> pd.DataFrame:
@@ -247,7 +248,7 @@ def load_csv_data(csv_path: str) -> pd.DataFrame:
             raise FileNotFoundError(f"CSV file not found: {csv_path}")
         
         df = pd.read_csv(csv_path)
-        print(f"✓ Successfully loaded CSV file: {csv_path}")
+        print(f"[OK] Successfully loaded CSV file: {csv_path}")
         print(f"  Rows: {len(df)}, Columns: {len(df.columns)}")
         
         # Validate required columns
@@ -257,12 +258,12 @@ def load_csv_data(csv_path: str) -> pd.DataFrame:
         if missing_columns:
             raise ValueError(f"Missing required columns: {missing_columns}")
         
-        print(f"✓ All required columns present: {required_columns}")
+        print(f"[OK] All required columns present: {required_columns}")
         
         return df
         
     except Exception as e:
-        print(f"✗ Error loading CSV file: {e}")
+        print(f"[ERROR] Error loading CSV file: {e}")
         raise
 
 
@@ -276,51 +277,51 @@ def main():
         'port': '5432',
         'database': 'fintech_reviews',
         'user': 'postgres',  # Change this to your PostgreSQL username
-        'password': 'your_password_here'  # Change this to your PostgreSQL password
+        'password': '199605'  # Change this to your PostgreSQL password
     }
     
     # Path to cleaned CSV file
     csv_path = r'c:\Users\yoga\code\10_Academy\week_2\data\bank_reviews_clean.csv'
     
     print("="*70)
-    print("🚀 PostgreSQL Data Insertion Script")
+    print("PostgreSQL Data Insertion Script")
     print("="*70)
     
     try:
         # Load CSV data
-        print("\n📂 Step 1: Loading CSV data...")
+        print("\n[Step 1/6] Loading CSV data...")
         df = load_csv_data(csv_path)
         
         # Initialize database inserter
-        print("\n🔌 Step 2: Connecting to PostgreSQL...")
+        print("\n[Step 2/6] Connecting to PostgreSQL...")
         inserter = PostgreSQLInserter(db_config)
         
         if not inserter.connect():
-            print("\n✗ Failed to connect to database. Please check your credentials.")
+            print("\n[ERROR] Failed to connect to database. Please check your credentials.")
             sys.exit(1)
         
         # Insert banks
-        print("\n🏦 Step 3: Inserting banks...")
+        print("\n[Step 3/6] Inserting banks...")
         bank_mapping = inserter.insert_banks(df)
         
         # Insert reviews
-        print("\n📝 Step 4: Inserting reviews...")
+        print("\n[Step 4/6] Inserting reviews...")
         reviews_inserted = inserter.insert_reviews(df, bank_mapping)
         
         # Print summary statistics
-        print("\n📊 Step 5: Generating summary statistics...")
+        print("\n[Step 5/6] Generating summary statistics...")
         inserter.print_summary_statistics()
         
         # Close connection
-        print("\n🔒 Step 6: Closing database connection...")
+        print("\n[Step 6/6] Closing database connection...")
         inserter.close()
         
         print("\n" + "="*70)
-        print("✅ DATA INSERTION COMPLETED SUCCESSFULLY!")
+        print("[SUCCESS] DATA INSERTION COMPLETED SUCCESSFULLY!")
         print("="*70)
         
     except Exception as e:
-        print(f"\n❌ Error during execution: {e}")
+        print(f"\n[ERROR] Error during execution: {e}")
         sys.exit(1)
 
 

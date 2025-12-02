@@ -1,0 +1,4 @@
+bank,total_reviews,avg_rating,avg_vader,pct_negative_reviews
+Bank of Abyssinia,336,3.15,0.105,22.62
+Commercial Bank of Ethiopia,316,3.98,0.232,9.18
+Dashen Bank,327,3.8,0.288,14.68
